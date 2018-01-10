@@ -1,0 +1,59 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-11-04 14:17-0700\n"
+"PO-Revision-Date: 2015-11-04 14:18-0700\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.5\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en\n"
+
+#: install/sd-client-install.py:38
+msgid "Silent Dune Client Installer"
+msgstr "Silent Dune Client Installer"
+
+#: install/sd-client-install.py:39
+msgid "--server"
+msgstr "--server"
+
+#: install/sd-client-install.py:39
+msgid "Silent Dune server"
+msgstr "Silent Dune server"
+
+#: install/sd-client-install.py:40
+msgid "--user"
+msgstr "--user"
+
+#: install/sd-client-install.py:40
+msgid "Authorized Silent Dune user name"
+msgstr "Authorized Silent Dune user name"
+
+#: install/sd-client-install.py:41
+msgid "--password"
+msgstr "--password"
+
+#: install/sd-client-install.py:41 install/sd-client-install.py:42
+msgid "Password for authorized user"
+msgstr "Password for authorized user"
+
+#: install/sd-client-install.py:42
+msgid "--bundle"
+msgstr "--bundle"
+
+#: install/sd-client-install.py:43
+msgid "--debug"
+msgstr "--debug"
+
+#: install/sd-client-install.py:43
+msgid "Enable debug output"
+msgstr "Enable debug output"

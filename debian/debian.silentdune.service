@@ -1,0 +1,15 @@
+[Unit]
+Description=SilentDune - A modular firewall daemon
+Before=network.target
+Before=libvirtd.service
+Before=NetworkManager.service
+After=dbus.service
+After=polkit.service
+Conflicts=iptables.service ip6tables.service ebtables.service ipset.service firewalld.service ufw.service
+
+[Service]
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=basic.target

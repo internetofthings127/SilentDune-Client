@@ -1,0 +1,123 @@
+## <summary>Service daemon with a D-BUS interface that provides a dynamic managed firewall.</summary>
+
+########################################
+## <summary>
+##	Read silentdune config
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed access.
+## </summary>
+## </param>
+#
+interface(`silentdune_read_config',`
+	gen_require(`
+		type silentdune_etc_rw_t;
+	')
+
+	files_search_etc($1)
+	read_files_pattern($1, silentdune_etc_rw_t, silentdune_etc_rw_t)
+')
+
+########################################
+## <summary>
+##	Execute silentdune server in the silentdune domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	The type of the process performing this action.
+##	</summary>
+## </param>
+#
+interface(`silentdune_initrc_domtrans',`
+	gen_require(`
+		type silentdune_initrc_exec_t;
+	')
+
+	init_labeled_script_domtrans($1, silentdune_initrc_exec_t)
+')
+
+########################################
+## <summary>
+##	Send and receive messages from
+##	silentdune over dbus.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`silentdune_dbus_chat',`
+	gen_require(`
+		type silentdune_t;
+		class dbus send_msg;
+	')
+
+	allow $1 silentdune_t:dbus send_msg;
+	allow silentdune_t $1:dbus send_msg;
+')
+
+########################################
+## <summary>
+##	Dontaudit attempts to write
+##	silentdune tmp files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain to not audit.
+##	</summary>
+## </param>
+#
+interface(`silentdune_dontaudit_write_tmp_files',`
+	gen_require(`
+		type silentdune_tmp_t;
+	')
+
+	dontaudit $1 silentdune_tmp_t:file write;
+')
+
+########################################
+## <summary>
+##	All of the rules required to administrate
+##	an silentdune environment
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	Role allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`silentdune_admin',`
+	gen_require(`
+		type silentdune_t, silentdune_initrc_exec_t;
+		type silentdune_etc_rw_t, silentdune_var_run_t;
+		type silentdune_var_log_t;
+	')
+
+	allow $1 silentdune_t:process signal_perms;
+	ps_process_pattern($1, silentdune_t)
+
+	tunable_policy(`deny_ptrace',`',`
+		allow $1 silentdune_t:process ptrace;
+	')
+
+	silentdune_initrc_domtrans($1)
+	domain_system_change_exemption($1)
+	role_transition $2 silentdune_initrc_exec_t system_r;
+	allow $2 system_r;
+
+	files_search_pids($1)
+	admin_pattern($1, silentdune_var_run_t)
+	
+	logging_search_logs($1)
+	admin_pattern($1, silentdune_var_log_t)
+
+	admin_pattern($1, silentdune_etc_rw_t)
+')

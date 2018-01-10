@@ -1,0 +1,272 @@
+policy_module(silentdune, 1.1.1)
+
+########################################
+#
+# Declarations
+#
+
+require {
+  type null_device_t;
+  type setfiles_exec_t;
+  type sshd_t;
+  type sshd_var_run_t;
+  type sshd_initrc_exec_t;
+  type syslogd_t;
+  type syslogd_var_run_t;
+  type rpm_exec_t;
+  type ntpd_t;
+  type rpm_log_t;
+  type rpm_var_lib_t;
+  type rpm_var_cache_t;
+  type port_t;
+  type http_port_t;
+  type ftp_port_t;
+  type cert_t;
+  type user_home_t;
+  type local_login_t;
+  type auditd_t;
+  type consoletype_exec_t;
+  type dhcpc_t;
+  type init_t;
+  type initrc_t;
+  type initrc_var_run_t;
+  type var_run_t;
+  type iptables_t;
+  type iptables_initrc_exec_t;
+  type kernel_t;
+  type locale_t;
+  type udev_t;
+  type crond_t;
+  type getty_t;
+  type postfix_master_t;
+  type postfix_pickup_t;
+  type postfix_qmgr_t;
+  type default_context_t;
+  type ldconfig_exec_t;
+}
+
+type silentdune_t;
+type silentdune_exec_t;
+
+init_daemon_domain(silentdune_t, silentdune_exec_t)
+
+type silentdune_initrc_exec_t;
+init_script_file(silentdune_initrc_exec_t)
+
+type silentdune_etc_rw_t;
+files_config_file(silentdune_etc_rw_t)
+
+type silentdune_var_log_t;
+logging_log_file(silentdune_var_log_t)
+
+type silentdune_tmp_t;
+files_tmp_file(silentdune_tmp_t)
+
+type silentdune_tmpfs_t;
+files_tmpfs_file(silentdune_tmpfs_t)
+
+type silentdune_var_run_t;
+files_pid_file(silentdune_var_run_t)
+
+########################################
+#
+# Local policy
+#
+# https://matt.bionicmessage.net/selinux-policy-macros.html
+# https://wiki.gentoo.org/wiki/SELinux/Tutorials/How_does_a_process_get_into_a_certain_context#Process_transitions
+
+allow silentdune_t default_context_t:file read_file_perms;
+allow silentdune_t ldconfig_exec_t:file exec_file_perms;
+allow silentdune_t silentdune_etc_rw_t:file { relabelfrom relabelto };
+
+allow silentdune_exec_t silentdune_t:process { transition siginh };
+allow silentdune_initrc_exec_t silentdune_t:process { transition siginh };
+allow silentdune_t silentdune_initrc_exec_t:file exec_file_perms;
+
+allow silentdune_t self:capability { dac_override net_admin sys_nice sys_resource setuid setgid sys_ptrace };
+dontaudit silentdune_t self:capability sys_tty_config;
+allow silentdune_t self:fifo_file rw_fifo_file_perms;
+allow silentdune_t self:unix_stream_socket { accept listen connectto };
+allow silentdune_t self:udp_socket create_socket_perms;
+
+manage_dirs_pattern(silentdune_t, silentdune_etc_rw_t, silentdune_etc_rw_t)
+manage_files_pattern(silentdune_t, silentdune_etc_rw_t, silentdune_etc_rw_t)
+manage_lnk_files_pattern(silentdune_t, silentdune_etc_rw_t, silentdune_etc_rw_t)
+
+allow silentdune_t silentdune_var_log_t:file append_file_perms;
+allow silentdune_t silentdune_var_log_t:file create_file_perms;
+allow silentdune_t silentdune_var_log_t:file read_file_perms;
+allow silentdune_t silentdune_var_log_t:file setattr_file_perms;
+logging_log_filetrans(silentdune_t, silentdune_var_log_t, file)
+
+manage_files_pattern(silentdune_t, silentdune_tmp_t, silentdune_tmp_t)
+files_tmp_filetrans(silentdune_t, silentdune_tmp_t, file)
+allow silentdune_t silentdune_tmp_t:file mmap_file_perms;
+
+manage_files_pattern(silentdune_t, silentdune_tmpfs_t, silentdune_tmpfs_t)
+fs_tmpfs_filetrans(silentdune_t, silentdune_tmpfs_t, file)
+allow silentdune_t silentdune_tmpfs_t:file mmap_file_perms;
+
+manage_dirs_pattern(silentdune_t, silentdune_var_run_t, silentdune_var_run_t)
+manage_files_pattern(silentdune_t, silentdune_var_run_t, silentdune_var_run_t)
+manage_sock_files_pattern(silentdune_t, silentdune_var_run_t, silentdune_var_run_t)
+files_pid_filetrans(silentdune_t, silentdune_var_run_t, { file sock_file })
+can_exec(silentdune_t, silentdune_var_run_t)
+
+allow silentdune_t tmpfs_t:filesystem getattr;
+
+kernel_read_network_state(silentdune_t)
+kernel_read_system_state(silentdune_t)
+kernel_rw_net_sysctls(silentdune_t)
+
+corecmd_exec_bin(silentdune_t)
+corecmd_exec_shell(silentdune_t)
+
+dev_read_urand(silentdune_t)
+dev_search_sysfs(silentdune_t)
+
+domain_use_interactive_fds(silentdune_t)
+
+files_dontaudit_list_tmp(silentdune_t)
+
+fs_getattr_xattr_fs(silentdune_t)
+
+auth_use_nsswitch(silentdune_t)
+
+logging_send_syslog_msg(silentdune_t)
+
+sysnet_dns_name_resolve(silentdune_t)
+
+########################################
+#
+# Sysv init deamon
+#
+allow silentdune_t self:process signal;
+allow silentdune_t local_login_t:dir search_dir_perms;
+allow silentdune_t local_login_t:file read_file_perms;
+
+allow silentdune_t init_t:dir search_dir_perms;
+allow silentdune_t init_t:file read_file_perms;
+allow silentdune_t init_t:lnk_file read;
+allow silentdune_t initrc_t:dir search_dir_perms;
+allow silentdune_t initrc_t:file read_file_perms;
+allow silentdune_t initrc_t:lnk_file read;
+allow silentdune_t initrc_var_run_t:file read_file_perms;
+
+allow iptables_t silentdune_var_log_t:file read;
+allow silentdune_t iptables_initrc_exec_t:file exec_file_perms;
+allow silentdune_t kernel_t:dir search_dir_perms;
+allow silentdune_t kernel_t:file read_file_perms;
+allow silentdune_t kernel_t:lnk_file read;
+allow silentdune_t locale_t:file read_file_perms;
+
+allow silentdune_t crond_t:dir search_dir_perms;
+allow silentdune_t crond_t:file read_file_perms;
+allow silentdune_t crond_t:lnk_file read;
+
+allow silentdune_t getty_t:dir search_dir_perms;
+allow silentdune_t getty_t:file read_file_perms;
+allow silentdune_t getty_t:lnk_file read;
+
+allow silentdune_t postfix_master_t:dir search_dir_perms;
+allow silentdune_t postfix_master_t:file read_file_perms;
+allow silentdune_t postfix_master_t:lnk_file read;
+allow silentdune_t postfix_pickup_t:dir search_dir_perms;
+allow silentdune_t postfix_pickup_t:file read_file_perms;
+allow silentdune_t postfix_pickup_t:lnk_file read;
+allow silentdune_t postfix_qmgr_t:dir search_dir_perms;
+allow silentdune_t postfix_qmgr_t:file read_file_perms;
+allow silentdune_t postfix_qmgr_t:lnk_file read;
+
+########################################
+#
+# System query policy for querying local configuration
+#
+
+allow silentdune_t udev_t:dir search;
+allow silentdune_t udev_t:file read_file_perms;
+allow silentdune_t udev_t:lnk_file read;
+
+# Read system log
+allow silentdune_t var_run_t:dir { create setattr };
+
+allow silentdune_t syslogd_var_run_t:dir list_dir_perms;
+allow silentdune_t syslogd_var_run_t:file read_file_perms;
+allow silentdune_t syslogd_t:dir search;
+allow silentdune_t syslogd_t:file read_file_perms;
+allow silentdune_t syslogd_t:lnk_file read;
+
+allow silentdune_t setfiles_exec_t:file exec_file_perms;
+
+allow silentdune_t auditd_t:dir search_dir_perms;
+allow silentdune_t auditd_t:file read_file_perms;
+allow silentdune_t auditd_t:lnk_file read;
+allow silentdune_t consoletype_exec_t:file exec_file_perms;
+
+# Allow checking dhcp config
+allow silentdune_t dhcpc_t:dir search_dir_perms;
+allow silentdune_t dhcpc_t:file read_file_perms;
+allow silentdune_t dhcpc_t:lnk_file read;
+
+# Allow checking sshd config
+allow silentdune_t sshd_t:dir search_dir_perms;
+allow silentdune_t sshd_t:file read_file_perms;
+allow silentdune_t sshd_t:lnk_file read;
+allow silentdune_t sshd_var_run_t:file read_file_perms;
+allow silentdune_t sshd_initrc_exec_t:file exec_file_perms;
+
+# Allow executing yum
+allow silentdune_t rpm_exec_t:file exec_file_perms;
+allow silentdune_t rpm_log_t:file read_file_perms;
+allow silentdune_t rpm_var_lib_t:dir add_entry_dir_perms;
+allow silentdune_t rpm_var_lib_t:file manage_file_perms;
+
+allow silentdune_t rpm_var_cache_t:file manage_file_perms;
+allow silentdune_t rpm_var_cache_t:dir manage_dir_perms;
+allow silentdune_t http_port_t:tcp_socket name_connect;
+allow silentdune_t cert_t:dir rw_dir_perms;
+allow silentdune_t cert_t:file manage_file_perms;
+
+allow silentdune_t ftp_port_t:tcp_socket name_connect;
+
+# local home directory repository
+allow silentdune_t user_home_t:file read_file_perms;
+
+# Allow executing ntpd
+allow silentdune_t ntpd_t:file exec_file_perms;
+allow silentdune_t ntpd_t:dir search_dir_perms;
+
+# Allow connecting to SilentDune management server
+allow silentdune_t port_t:tcp_socket name_connect;
+
+optional_policy(`
+	dbus_system_domain(silentdune_t, silentdune_exec_t)
+
+	optional_policy(`
+		devicekit_dbus_chat_power(silentdune_t)
+	')
+
+	optional_policy(`
+		policykit_dbus_chat(silentdune_t)
+	')
+
+	optional_policy(`
+		networkmanager_dbus_chat(silentdune_t)
+	')
+')
+
+# rhel7 #optional_policy(`
+# rhel7 #	gnome_read_generic_data_home_dirs(silentdune_t)
+# rhel7 #')
+
+optional_policy(`
+	iptables_domtrans(silentdune_t)
+')
+
+optional_policy(`
+	modutils_domtrans_insmod(silentdune_t)
+')
+
+# rhel7 #optional_policy(`
+# rhel7 #	networkmanager_read_state(silentdune_t)
+# rhel7 #')

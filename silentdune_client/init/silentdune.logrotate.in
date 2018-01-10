@@ -1,0 +1,8 @@
+/var/log/silentdune.log {
+    missingok
+    notifempty
+    sharedscripts
+    postrotate
+    /sbin/service sdc-firewall reload > /dev/null 2>/dev/null || true
+    endscript
+  }

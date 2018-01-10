@@ -1,0 +1,122 @@
+#!/bin/sh
+#
+# Silent Dune Client Startup script for the firewall daemon
+#
+# chkconfig: - 08 92
+# description:	The firewall deamon manages the firewall and handles dynamic
+#               firewall changes.
+#
+# processname: sdc-firewall
+# config: /etc/silentdune/sdc.conf
+# pidfile: /var/run/silentdune/sdc.pid
+#
+
+### BEGIN INIT INFO
+# Provides:  sdc-firewall
+# Required-Start: $syslog $network $local_fs
+# Required-Stop: $local_fs $syslog
+# Should-Start: $syslog
+# Should-Stop: $network $syslog
+# Default-Start: 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: Silent Dune Firewall Service
+# Description: Silent Dune Firewall Management Service
+### END INIT INFO
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+exec="/usr/sbin/sdc-firewall"
+prog="sdc-firewall"
+
+# Possible values: --debug, --config
+PROG_ARGS="--debug"
+
+lockfile=/var/lock/subsys/$prog
+
+user_check() {
+    if [ $UID -ne 0 ] ; then
+        echo "User has insufficient privilege."
+        exit 4
+    fi
+}
+
+start() {
+    user_check
+    [ -x $exec ] || exit 5
+#    [ -f $config ] || exit 6
+    echo -n $"Starting $prog: "
+    daemon $exec $PROG_ARGS start
+    retval=$?
+    echo
+    [ $retval -eq 0 ] && touch $lockfile
+}
+
+stop() {
+    user_check
+    echo -n $"Stopping $prog: "
+    $prog stop
+    retval=$?
+    echo
+    [ $retval -eq 0 ] && rm -f $lockfile
+}
+
+restart() {
+    stop
+    start
+}
+
+reload() {
+    user_check
+    echo -n $"Reloading firewall: "
+    echo -n $"Reloading no supported yet"
+    retval=$?
+    [ $retval -eq 0 ] && success || failure
+    echo
+}
+
+force_reload() {
+    restart
+}
+
+rh_status() {
+    user_check
+    # run checks to determine if the service is running or use generic status
+    status $prog
+}
+
+rh_status_q() {
+    rh_status >/dev/null 2>&1
+}
+
+usage() {
+    echo $"Usage: $0 {start|stop|status|restart|reload}"
+}
+
+case "$1" in
+    start)
+        rh_status_q && exit 0
+        $1
+        ;;
+    stop)
+        rh_status_q || exit 0
+        $1
+        ;;
+    restart)
+        $1
+        ;;
+    reload)
+        force_reload
+        ;;
+    status)
+        rh_status
+        ;;
+    usage)
+        usage
+        exit 0
+        ;;
+    *)
+        usage
+        exit 2
+esac
+exit $?

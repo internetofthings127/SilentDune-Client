@@ -1,0 +1,11 @@
+/etc/rc\.d/init\.d/sdc-firewall	--	gen_context(system_u:object_r:silentdune_initrc_exec_t,s0)
+
+/etc/silentdune(/.*)?	gen_context(system_u:object_r:silentdune_etc_rw_t,s0)
+
+/usr/sbin/sdc-install	--	gen_context(system_u:object_r:silentdune_exec_t,s0)
+/usr/sbin/sdc-firewall	--	gen_context(system_u:object_r:silentdune_exec_t,s0)
+
+/var/log/silentdune.*	--	gen_context(system_u:object_r:silentdune_var_log_t,s0)
+
+/var/run/silentdune(/.*)?	gen_context(system_u:object_r:silentdune_var_run_t,s0)
+/var/run/silentdune\.pid	--	gen_context(system_u:object_r:silentdune_var_run_t,s0)

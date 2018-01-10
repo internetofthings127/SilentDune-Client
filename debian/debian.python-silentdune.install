@@ -1,0 +1,10 @@
+silentdune_client/*.py* /usr/local/lib/python2.7/dist-packages/silentdune_client
+silentdune_client/builders/*.py* /usr/local/lib/python2.7/dist-packages/silentdune_client/builders
+silentdune_client/init /usr/local/lib/python2.7/dist-packages/silentdune_client
+silentdune_client/models/*.py* /usr/local/lib/python2.7/dist-packages/silentdune_client/models
+silentdune_client/modules/*.py* /usr/local/lib/python2.7/dist-packages/silentdune_client/modules
+silentdune_client/modules/firewall/*.py* /usr/local/lib/python2.7/dist-packages/silentdune_client/modules/firewall
+silentdune_client/modules/firewall/manager/*.py* /usr/local/lib/python2.7/dist-packages/silentdune_client/modules/firewall/manager
+silentdune_client/po /usr/local/lib/python2.7/dist-packages/silentdune_client
+silentdune_client/selinux /usr/local/lib/python2.7/dist-packages/silentdune_client
+silentdune_client/utils/*.py* /usr/local/lib/python2.7/dist-packages/silentdune_client/utils

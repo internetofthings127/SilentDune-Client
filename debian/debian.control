@@ -1,0 +1,114 @@
+Source: silentdune
+Section: admin
+Priority: optional
+Maintainer: Robert Abram <robert.abram@entpack.com>
+Standards-Version: 3.9.8
+Homepage: https://github.com/EntPack/SilentDune-Client
+X-Python-Version: >= 2.7
+X-Python3-Version: >= 3.2
+
+Package: python-silentdune
+Architecture: any
+Depends:
+  ${python:Depends},
+  ${misc:Depends}
+Description: An Open Source Multi-Threaded and Modular Linux Firewall Manager Service
+	dedicated to setting Egress firewall rules and simplifying firewall management.
+
+Package: python-silentdune-mod-examples
+Architecture: any
+Depends:
+  python-silentdune,
+  ${python:Depends},
+  ${misc:Depends}
+Description: Example module for extending silentdune
+
+Package: python-silentdune-mod-logging
+Architecture: any
+Depends:
+  python-silentdune,
+  ${python:Depends},
+  ${misc:Depends}
+Description: Logging module for silentdune
+
+Package: python-silentdune-mod-server
+Architecture: any
+Depends: 
+  python-silentdune,
+  python-silentdune-mod-logging,
+  ${python:Depends},
+  ${misc:Depends}
+Description: Server module for silentdune
+
+Package: python-silentdune-remote-config
+Architecture: any
+Depends:
+  python-silentdune,
+  ${python:Depends},
+  ${misc:Depends}
+Description: Remote Config module for silentdune
+
+Package: python-silentdune-mod-autodiscovery
+Architecture: any
+Depends: 
+  python-silentdune,
+  ${python:Depends},
+  ${misc:Depends}
+Description: Auto discovery module for silentdune
+
+Package: python3-silentdune
+Architecture: any
+Depends:
+  ${python:Depends},
+  ${misc:Depends}
+Description: An Open Source Multi-Threaded and Modular Linux Firewall Manager Service
+	dedicated to setting Egress firewall rules and simplifying firewall management.
+
+Package: python3-silentdune-mod-examples
+Architecture: any
+Depends:
+  python3-silentdune,
+  ${python:Depends},
+  ${misc:Depends}
+Description: Example module for extending silentdune
+
+Package: python3-silentdune-mod-logging
+Architecture: any
+Depends:
+  python3-silentdune,
+  ${python:Depends},
+  ${misc:Depends}
+Description: Logging module for silentdune
+
+Package: python3-silentdune-mod-server
+Architecture: any
+Depends: 
+  python3-silentdune,
+  python3-silentdune-mod-logging,
+  ${python:Depends},
+  ${misc:Depends}
+Description: Server module for silentdune
+
+Package: python3-silentdune-remote-config
+Architecture: any
+Depends:
+  python3-silentdune,
+  ${python:Depends},
+  ${misc:Depends}
+Description: Remote Config module for silentdune
+
+Package: python3-silentdune-mod-autodiscovery
+Architecture: any
+Depends: 
+  python3-silentdune,
+  ${python:Depends},
+  ${misc:Depends}
+Description: Auto discovery module for silentdune
+
+Package: python3-silentdune-mod-autoservices
+Architecture: any
+Depends:
+  python3-silentdune,
+  ${python:Depends},
+  ${misc:Depends}
+Description: Auto services module for silentdune

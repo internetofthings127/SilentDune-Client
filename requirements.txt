@@ -1,0 +1,5 @@
+requests
+cryptography
+setuptools
+python-dateutil
+dnspython
